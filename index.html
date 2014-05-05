@@ -1,0 +1,216 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Screenshot Converter Tool</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link type="text/css" rel="stylesheet" href="https://fast.fonts.net/cssapi/da0e137b-49b2-405a-9d8d-7f0b917381a7.css"/>
+    <link rel="stylesheet" type="text/css" href="layout-test.css">
+  </head>
+  <body>
+    <div id='main'>
+      <h1>Screenshot Converter Tool</h1>
+      <p>Wrap the screenshots you've made with your iPhone into frames of the actual device.</p>
+      <section id="instructions" class="visible">
+      <img id="about" src="screen.png">
+      <h2>How It Works</h2>
+      <article>
+        <p><span>Step 1. </span> Click on the round upload button and select all the files you'd like to turn into mockups.</p>
+        <p><span>Step 2. </span> Download the completed mockups from the links that will appear here within a second.</p>
+      </article>
+    </section>
+      <form>
+        <input type="file" id="upload" class="visible" multiple accept="image/*" onchange="editFiles(this.files)">
+      </form>
+      <svg id="pulsingD" xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' id='Layer_1' x='0px' y='0px' width='80px' height='80px' viewBox='0 0 800 700' enable-background='new 0 0 300 300' xml:space='preserve'>
+        <g class="wrap">
+          <g class='beat logo'>
+            <path d='M529.046 134.609h-38.749c-6.624 0-11.995 5.375-11.995 11.999v148.598l-3.597-4.741 c-25.836-33.973-57.791-50.489-97.697-50.489c-66.168 0-133.141 51.226-133.141 149.133v1.109 c0 96.9 68.6 149.1 133.1 149.129c40.061 0 72.013-17.587 97.656-53.761l3.638-5.122v40.825 c0 6.6 5.4 12 12 11.995h38.749c6.624 0 11.999-5.375 11.999-11.995V146.608 C541.045 140 535.7 134.6 529 134.609z M307.16 390.218v-1.109c0-55.172 36.099-95.212 85.848-95.212 c49.245 0 86.4 40.9 86.4 95.212v1.109c0 53.39-37.941 95.214-86.393 95.214C344.066 485.4 307.2 444.5 307.2 390.218z' class="beat dox-d"/>
+
+            <path d='M161.162 321.654c-1.431-16.697-1.023-36.959 6.986-64.736c6.67-22.409 22.481-47.048 40.965-64.446 c18.123-17.045 42.472-30.216 69.321-36.357c25.312-5.788 46.72-5.344 62.716-3.5c2.314 0.1 4 1.1 5 2.1 c1.671 1.8 2 5.7 1 6.607c-0.798 0.766-2.954 1.641-5.085 1.767c-35.046 2.227-72.707 21.177-108.705 55.1 c-33.218 31.243-56.834 70.716-61.347 104.976c-0.261 2.124-1.078 4.041-2.072 4.964c-1.007 0.929-5.061 0.613-6.732-1.18 C162.185 325.9 161.3 324.1 161.2 321.654z' class="beat wave1"/>
+
+            <path d='M72.87 281.789c-1.905-22.205-1.373-49.225 9.282-86.216c8.906-29.842 29.968-62.659 54.598-85.838 c24.116-22.701 56.566-40.263 92.33-48.419c33.71-7.717 62.212-7.131 83.526-4.671c3.09 0.1 5.3 1.4 6.6 2.8 c2.23 2.4 2.6 7.5 1.3 8.779c-1.059 1-3.913 2.219-6.764 2.353c-46.676 2.985-96.854 28.218-144.803 73.4 c-44.249 41.641-75.707 94.231-81.723 139.849c-0.336 2.812-1.429 5.362-2.757 6.606c-1.343 1.24-6.744 0.819-8.968-1.554 C74.222 287.5 73 285.1 72.9 281.789z' class="beat wave2"/>
+          </g>
+        </g>
+      </svg>
+      <div id="canvases">
+      </div>
+      <div id="links">
+      </div>
+      <footer id='footer'>
+        <a href="https://www.doximity.com" target="_blank">&copy; 2014 Doximity, Inc.</a>
+      </footer>
+    </div>
+
+  </body>
+
+  <script type="text/javascript">
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-50209170-1', 'dropboxusercontent.com');
+        ga('send', 'pageview');
+
+      if (!navigator.userAgent.match(/Chrome|Mozilla|Safari/)) {
+        document.getElementById('main').style.display = 'none';
+        document.write('<h1>This browser is not supported yet. Please use Chrome for now.</h1>');
+      }
+
+    function editFiles(files) {
+      if (window.FileReader && navigator.userAgent.match(/Chrome|Mozilla|Safari/)) {
+        //clears the canvas and the collection of links, if needed
+        var oldCanvases = document.getElementById("canvases");
+        if (oldCanvases.firstChild) {
+          while (oldCanvases.firstChild) {
+            oldCanvases.removeChild(oldCanvases.firstChild);
+          }
+          document.getElementById('footer').className = "";
+        }
+
+        var oldLinks = document.getElementById('links');
+        if (oldLinks.firstChild) {
+          while (oldLinks.firstChild) {
+            oldLinks.removeChild(oldLinks.firstChild);
+          }
+        }
+
+        var instructions = document.getElementById('instructions');
+        fadeOut(instructions);
+        instructions.className = "";
+
+
+        //ensure all files are images
+        for (var i=0; i < files.length; i++) {
+          if (files[i].type.match(/image.*/)) {
+            continue;
+          } else alert(files[i].name + ' is not an image. Please, upload image files only');
+        };
+        //displays the loading icon
+        var uploadIcon = document.getElementById('upload');
+        var pulsingLogo = document.getElementById('pulsingD');
+        uploadIcon.className = "";
+        uploadIcon.className = "invisible";
+        pulsingLogo.style.display = "block";
+        fadeIn(pulsingLogo);
+        var downloadLinks = document.getElementById('links');
+        downloadLinks.style.display = "none";
+
+        //creates the canvases with the iphone backgrounds and adds the screenshots on top
+        for (var i=0; i < files.length; i=i+2) {
+          (i < files.length - 1) ? createCanvas(i/2, 2, files[i], files[i+1]) : createCanvas(i/2, 1, files[i]);
+          //and also creates a link to download the canvas as a .png file
+          var link = document.createElement('a');
+          link.innerHTML = 'Download mockup ' + parseInt(i/2 + 1) + " of " + Math.round(files.length/2);
+          link.id = parseInt(i/2);
+          link.download = 'download';
+          downloadLinks.appendChild(link);
+          link.onclick = function() {
+            downloadCanvas('bg' + this.id, this);
+          };
+        };
+        // hides the loading icon
+        pulsingLogo.style.opacity = "0";
+        pulsingLogo.style.display = "none";
+        uploadIcon.className = "";
+        uploadIcon.className = "visible";
+        downloadLinks.style.opacity = '0';
+        downloadLinks.style.display = "block";
+        //and shows the download links
+        fadeIn(downloadLinks);
+        if (downloadLinks.getElementsByTagName('a').length > 5) {
+          document.getElementById('footer').className = 'flexible';
+        }
+
+      } else { alert('This browser is not supported. Use Chrome instead.'); }
+    };
+
+    function createCanvas(nb, set, file1, file2) {
+      var canvas = document.createElement('canvas');
+      canvas.width = 1621;
+      canvas.height = 1621;
+      canvas.id = "bg" + nb;
+      document.getElementById('canvases').appendChild(canvas);
+      var context = canvas.getContext('2d');
+
+      window.URL = window.URL || window.webkitURL;
+      var imgBg = new Image();
+      // (set == 2) ? imgBg.src = "2iphones_bg.jpg" : imgBg.src = "iphone_bg.jpg";
+      imgBg.crossOrigin = "anonymous";
+      imgBg.onload = function() {
+        context.drawImage(imgBg, 0, 0);
+        var reader1 = new FileReader();
+        var screenshot1 = document.createElement('img');
+        screenshot1.src = window.URL.createObjectURL(file1);
+        screenshot1.crossOrigin = "anonymous";
+        screenshot1.onload = function(e) {
+          window.URL.revokeObjectURL(this.src);
+        };
+        addSreenshotToCanvas(canvas, screenshot1, 1);
+
+          if (file2) {
+            var screenshot2 = document.createElement('img');
+            screenshot2.src = window.URL.createObjectURL(file2);
+            screenshot2.crossOrigin = "anonymous";
+            screenshot2.onload = function(e) {
+              window.URL.revokeObjectURL(this.src);
+            };
+            addSreenshotToCanvas(canvas, screenshot2, 2);
+          }
+      };
+      (set == 2) ? imgBg.src = "2iphones_bg.jpg" : imgBg.src = "iphone_bg.jpg";
+
+      imgBg.crossOrigin = "anonymous";
+    };
+
+    function addSreenshotToCanvas(canvas, img, index) {
+      var x = index % 2 ? 77 : 909;
+      var y = 241;
+      img.crossOrigin = "anonymous";
+      img.onload = function() {
+        var cont = canvas.getContext('2d');
+        cont.drawImage(img, x, y);
+      }
+      img.crossOrigin = "anonymous";
+    };
+
+    function downloadCanvas (canvId, link) {
+      link.href = document.getElementById(canvId).toDataURL("image/png");
+      link.download = "mockup_img_" + canvId + '.png';
+    };
+
+    function fadeIn(item) {
+        var op = 0.02;
+        var timer = setInterval(function () {
+        if (op >= 1){
+            clearInterval(timer);
+            item.style.opacity = '1';
+        }
+        item.style.opacity = op;
+        op += op * 0.11;
+    }, 45);
+    };
+
+    function fadeOut(item) {
+      var op = 1;
+      var elHeight = item.clientHeight;
+      item.style.height = elHeight + "px";
+      var timer = setInterval(function () {
+
+        item.style.opacity = op;
+        item.style.height = parseInt(elHeight) + "px";
+        console.log(elHeight + " , op: " + op);
+        elHeight -= 0.24*(1-op)*elHeight;
+        op -= op * 0.32;
+
+        if (op <= 0.02){
+            clearInterval(timer);
+            item.style.opacity = '0';
+        }
+      }, 50);
+
+    };
+
+  </script>
+</html>
