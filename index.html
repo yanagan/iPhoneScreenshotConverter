@@ -104,11 +104,13 @@
           var link = document.createElement('a');
           link.innerHTML = 'Download mockup ' + parseInt(i/2 + 1) + " of " + Math.round(files.length/2);
           link.id = parseInt(i/2);
-          link.download = 'download';
+          // link.download = 'download';
           downloadLinks.appendChild(link);
-          link.onclick = function() {
-            downloadCanvas('bg' + this.id, this);
-          };
+          link.setAttribute("download", "mockup_img_" + parseInt(i/2));
+          link.href = document.getElementById('bg' + parseInt(i/2)).toDataURL("image/png");
+          // link.onclick = function() {
+          //   downloadCanvas('bg' + this.id, this);
+          // };
         };
         // hides the loading icon
         pulsingLogo.style.opacity = "0";
@@ -175,10 +177,10 @@
       img.crossOrigin = "anonymous";
     };
 
-    function downloadCanvas (canvId, link) {
-      link.href = document.getElementById(canvId).toDataURL("image/png");
-      link.download = "mockup_img_" + canvId + '.png';
-    };
+    // function downloadCanvas (canvId, link) {
+    //   link.href = document.getElementById(canvId).toDataURL("image/png");
+    //   link.download = "mockup_img_" + canvId + '.png';
+    // };
 
     function fadeIn(item) {
         var op = 0.02;
